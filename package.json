@@ -1,8 +1,8 @@
 {
-  "name": "auth0-nodejs-regular-webapp-sample",
+  "name": "auth0-multitenant-website",
   "version": "1.0.0",
-  "description": "Auth0 + NodeJS Regular WebApp seed",
-  "repository": "git://github.com/auth0/node-auth0",
+  "description": "Auth0 Multi-tenant Website Sample",
+  "repository": "https://github.com/auth0-samples/auth0-multitenant-website",
   "author": "Auth0",
   "license": "MIT",
   "scripts": {
