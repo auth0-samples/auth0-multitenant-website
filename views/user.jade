@@ -3,6 +3,6 @@ extends layout
 block content
   img(src="#{user.picture}")
   h2 Welcome #{user.nickname}!
-  div Groups: #{user._json.groups}
+  div Tenants: #{user._json.groups}
   br
   a(href='/logout') Logout
