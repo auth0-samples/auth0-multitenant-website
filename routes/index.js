@@ -36,7 +36,7 @@ router.get('/logout', function(req, res){
 });
 
 router.get('/callback',
-  passport.authenticate('auth0', { failureRedirect: '/url-if-something-fails' }),
+  passport.authenticate('auth0', { failWithError: true }),
   function(req, res) {
     //check that user is authorized to access this tenant
     if (req.user._json.groups.indexOf(req.session.tenant) === -1) {
@@ -45,6 +45,14 @@ router.get('/callback',
     }
 
     res.redirect(req.session.returnTo);
+  },
+  function(err, req, res, next) {
+    if (err.constructor.name === 'AuthenticationError') {
+      err.description = req.query.error_description;
+      return res.json(err);
+    }
+
+    next(err);
   });
 
 
