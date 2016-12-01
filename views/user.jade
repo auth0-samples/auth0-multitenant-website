@@ -17,37 +17,14 @@ block content
 
   script.
     var switchTenant = function (tenant) {
-      var url = buildTenantUrl(tenant);
+      var url = '//' + tenant.toLowerCase() + '.#{host}/user';
       window.location.href = url;
-    };
-
-    var getCurrentTenant = function() {
-      var hostParts = "#{host}".split('.');
-      if (hostParts.length > 2) {
-        return hostParts[0].toLowerCase();
-      }
-      return;
-    };
-
-    var buildTenantUrl = function(tenant) {
-      var hostParts = "#{host}".split('.');
-
-      if (hostParts.length > 2) {
-        hostParts[0] = tenant;
-      } else {
-        hostParts.splice(0, 0, tenant);
-      }
-
-      var url = '//' + hostParts.join('.') + '/user';
-
-      return url;
     };
 
     var setDefaultTenant = function() {
       var tenantSelect = document.getElementById('tenant-select');
       var options = tenantSelect.options;
-      var currentTenant =  getCurrentTenant() || '';
-
+      var currentTenant = '#{currentTenant}';
       if (!currentTenant) return;
 
       for (var i = 0; i < options.length; i++) {
