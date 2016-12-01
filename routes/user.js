@@ -5,7 +5,7 @@ var router = express.Router();
 
 /* GET user profile. */
 router.get('/', ensureLoggedIn, function(req, res, next) {
-  res.render('user', { user: req.user });
+  res.render('user', { user: req.user, host: req.get('host') });
 });
 
 module.exports = router;
