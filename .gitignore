@@ -34,3 +34,6 @@ node_modules
 npm-debug.log
 
 .env
+
+# VSCode magic
+.vscode
