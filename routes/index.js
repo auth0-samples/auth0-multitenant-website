@@ -12,6 +12,10 @@ var env = {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  if (req.user) {
+    res.redirect('/user');
+  }
+
   res.render('index', { title: 'Multi-tenant App!', env: env });
 });
 
