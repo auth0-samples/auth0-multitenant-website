@@ -1,7 +1,7 @@
 var express = require('express');
 var passport = require('passport');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
-var ensureTenantContext = require('../models/ensureTenantContext').ensureTenant();
+var ensureTenantContext = require('../lib/ensureTenantContext').ensureTenant();
 var router = express.Router();
 
 /* GET user profile. */
