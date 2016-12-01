@@ -1,0 +1,13 @@
+extends layout
+
+block content  
+  h1= title
+  div
+    p Oh no! I can't figure out where to send you.  Please tell me where you want to go.
+    ul
+      - each tenant in tenants
+        li
+          a(href="http://" + tenant + ".yourcompany.com:3000/user") #{tenant}
+  
+
+  

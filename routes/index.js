@@ -16,7 +16,8 @@ router.get('/', function(req, res, next) {
 
 router.get('/login',
   function(req, res) {
-    var tenant = req.get('host').split('.')[0];
+    var hostParts = req.get('host').split('.');
+    var tenant = hostParts.length > 2 ? hostParts[0] : null;
     req.session.tenant = tenant;
     req.session.returnTo = req.protocol + '://' + req.get('host') + '/user';
 
@@ -38,6 +39,13 @@ router.get('/logout', function(req, res){
 router.get('/callback',
   passport.authenticate('auth0', { failWithError: true }),
   function(req, res) {
+    //check if authenticated in tenant, otherwise redirect to tenant select.
+    if (!req.session.tenant) {
+      res.redirect('/selectTenant');
+      return;
+    }
+
+
     //check that user is authorized to access this tenant
     if (req.user._json.groups.indexOf(req.session.tenant) === -1) {
       req.logout();
