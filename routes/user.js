@@ -5,7 +5,15 @@ var router = express.Router();
 
 /* GET user profile. */
 router.get('/', ensureLoggedIn, function(req, res, next) {
-  res.render('user', { user: req.user, host: req.get('host') });
+
+  // The host, which may contain tenant (e.g. tenant1.yourcompany.com)
+  var host= req.get('host');
+  var hostParts = host.split('.');;
+
+  // The host without tenant (e.g. yourcompany.com)
+  var topLevelHost = hostParts.length > 2 ? hostParts.shift().join('.') : host;
+
+  res.render('user', { user: req.user, host: topLevelHost });
 });
 
 module.exports = router;
