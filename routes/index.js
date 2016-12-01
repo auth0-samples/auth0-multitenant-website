@@ -2,7 +2,7 @@ var express = require('express');
 var passport = require('passport');
 var router = express.Router();
 var querystring = require('querystring');
-var ensureTenantContext = require('../lib/ensureTenantContext').ensureTenant();
+var ensureTenant = require('../lib/tenant').ensureTenant();
 
 var env = {
   AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
@@ -43,7 +43,7 @@ router.get('/logout', function(req, res){
 
 router.get('/callback',
   passport.authenticate('auth0', { failWithError: true }),
-  ensureTenantContext,
+  ensureTenant,
   function(req, res) {
     res.redirect(req.session.returnTo);
   });
