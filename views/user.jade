@@ -5,15 +5,16 @@ block content
   - var tenants = user._json.groups
   img(src="#{user.picture}")
   h2 Welcome #{user.nickname}!
-  div Tenants: #{tenants}
+  div My Tenants:
+    - each tenant in tenants
+      span(style="margin: 3px")
+      - var isActiveTenant = tenant == currentTenant;
+      - var css = isActiveTenant ? 'color: orange; font-weight: bold;' : '';
+      - var url = isActiveTenant ?  "#" : "//" + tenant.toLowerCase() + "." + host + "/user";
+        a(href=url style=css) #{tenant}
   br
+  
   a(href='/logout') Logout
-
-  div
-    span Switch Tenants
-    select(id="tenant-select" onchange="switchTenant(this.value)")
-      - each tenant in tenants
-        option(value=tenant) #{tenant}
 
   script.
     var switchTenant = function (tenant) {
