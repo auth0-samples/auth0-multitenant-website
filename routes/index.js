@@ -2,6 +2,7 @@ var express = require('express');
 var passport = require('passport');
 var router = express.Router();
 var querystring = require('querystring');
+var ensureTenantContext = require('../lib/ensureTenantContext').ensureTenant();
 
 var env = {
   AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
@@ -38,30 +39,9 @@ router.get('/logout', function(req, res){
 
 router.get('/callback',
   passport.authenticate('auth0', { failWithError: true }),
+  ensureTenantContext,
   function(req, res) {
-    //check if authenticated in tenant, otherwise redirect to tenant select.
-    if (!req.session.tenant) {
-      res.redirect('/selectTenant');
-      return;
-    }
-
-
-    //check that user is authorized to access this tenant
-    if (req.user._json.groups.indexOf(req.session.tenant) === -1) {
-      req.logout();
-      res.send('Not a member of this tenant');
-    }
-
     res.redirect(req.session.returnTo);
-  },
-  function(err, req, res, next) {
-    if (err.constructor.name === 'AuthenticationError') {
-      err.description = req.query.error_description;
-      return res.json(err);
-    }
-
-    next(err);
   });
-
 
 module.exports = router;
