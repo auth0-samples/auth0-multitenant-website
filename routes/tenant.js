@@ -12,6 +12,7 @@ function buildTenants (req) {
   });
 }
 
+/* GET tenant chooser page */
 router.get('/choose', 
   ensureLoggedIn(), 
   function(req, res, next) {
@@ -23,6 +24,7 @@ router.get('/choose',
     });
   });
 
+/* GET user unauthorized for tenant page */
 router.get('/unauthorized', 
   ensureLoggedIn(), 
   function(req, res, next) {
