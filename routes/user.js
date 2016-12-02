@@ -11,24 +11,22 @@ router.get('/',
   tenant.setCurrent(),
   tenant.ensureCurrent(),
   tenant.ensureUrl(), 
-  function(req, res, next) {
-    // The host, which may contain tenant (e.g. tenant1.yourcompany.com)
-    var host= req.get('host');
-    var hostParts = host.split('.');;
-    var currentTenant;
+  function(req, res) {
+    var tenants = req.user._json.groups.map(tenant => {
+      var isActive = tenant === req.tenant;
 
-    if (hostParts.length > 2) {
-      currentTenant = hostParts[0];
+      return {
+        name: tenant,
+        isActive: isActive,
+        url: isActive ? '#' : `http://${tenant}.yourcompany.com:3000/user`
+      };
+    });
 
-      // removes the tenant from the host parts.
-      hostParts.shift();
-    }
-
-    // The host without tenant (e.g. yourcompany.com)
-    var topLevelHost = hostParts.join('.')
-
-
-    res.render('user', { user: req.user, host: topLevelHost, currentTenant: currentTenant });
+    res.render('user', { 
+      user: req.user, 
+      tenants: tenants,
+      currentTenant: req.tenant
+    });
   });
 
 module.exports = router;

@@ -2,40 +2,13 @@ extends layout
 
 block content
 
-  - var tenants = user._json.groups
   img(src="#{user.picture}")
   h2 Welcome #{user.nickname}!
   div My Tenants:
     - each tenant in tenants
       span(style="margin: 3px")
-      - var isActiveTenant = tenant == currentTenant;
-      - var css = isActiveTenant ? 'color: orange; font-weight: bold;' : '';
-      - var url = isActiveTenant ?  "#" : "//" + tenant.toLowerCase() + "." + host + "/user";
-        a(href=url style=css) #{tenant}
+      - var css = tenant.isActive ? 'color: orange; font-weight: bold;' : '';
+        a(href=tenant.url style=css) #{tenant.name}
   br
   
   a(href='/logout') Logout
-
-  script.
-    var switchTenant = function (tenant) {
-      var url = '//' + tenant.toLowerCase() + '.#{host}/user';
-      window.location.href = url;
-    };
-
-    var setDefaultTenant = function() {
-      var tenantSelect = document.getElementById('tenant-select');
-      var options = tenantSelect.options;
-      var currentTenant = '#{currentTenant}';
-      if (!currentTenant) return;
-
-      for (var i = 0; i < options.length; i++) {
-        if (options[i].value.toLowerCase() == currentTenant) {
-          options[i].defaultSelected = true;
-          break;
-        }
-      }
-    };
-
-    document.onload = (function() {
-      setDefaultTenant();
-    })();
