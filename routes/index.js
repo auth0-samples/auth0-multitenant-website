@@ -49,7 +49,7 @@ router.get('/callback',
   tenant.ensureCurrent(),
   function(req, res) {
     var path = req.session.returnTo || '/user';
-    var url = `http://${req.tenant}.yourcompany.com:3000${path}`;
+    var url = `http://${req.tenant}.${process.env.ROOT_DOMAIN}:${process.env.PORT}${path}`;
 
     // clear session values used to complete login flow
     delete req.session.loginTenant;

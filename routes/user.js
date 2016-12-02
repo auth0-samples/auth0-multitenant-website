@@ -18,7 +18,7 @@ router.get('/',
       return {
         name: tenant,
         isActive: isActive,
-        url: isActive ? '#' : `http://${tenant}.yourcompany.com:3000/user`
+        url: isActive ? '#' : `http://${tenant}.${process.env.ROOT_DOMAIN}:${process.env.PORT}/user`
       };
     });
 

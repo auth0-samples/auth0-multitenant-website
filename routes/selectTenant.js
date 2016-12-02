@@ -9,7 +9,7 @@ router.get('/',
     var tenants = req.user._json.groups.map(tenant => {
       return {
         name: tenant,
-        url: `http://${tenant}.yourcompany.com:3000/user`
+        url: `http://${tenant}.${process.env.ROOT_DOMAIN}:${process.env.PORT}/user`
       };
     });
     
