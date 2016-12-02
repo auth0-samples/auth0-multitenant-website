@@ -4,7 +4,12 @@ Sample that demonstrates a simple multi-tenant web application that uses the [Au
 
 ## Features
 
-(more)
+* Tenants are decoupled from the Auth0 connections used to store the users
+* Users are organized into tenants using logical groups vs. partitioned by Auth0 connections
+* Therefore you can store _all_ users (across all tenants) in one Database connection (as shown in the sample) or across multiple connections (eg. some users in the Database connection and some users in an enterprise connection, like AD)
+* The multi-tenant application is represented as a single Client in Auth0 (with a single OAuth2 callback endpoint) vs. one client per tenant
+* The multi-tenant application is a simple Node.js (Express) app
+* A SPA app could also be built in a similar fashion, but a regular web app was simpler to remonstrate
 
 ## How it works
 
@@ -114,7 +119,6 @@ To see how this sample handles different users and different tenants, try each o
 3. Like Scenario 2, the user will be redirected to the `tenant1` user page
 4. Browse to `tenant2`'s user page: http://tenant2.yourcompany.com:3000/user
 5. Since this user not a member of `tenant2` they will be redirected to a page that informs them they don't have access and that they should choose a valid tenant
-
 
 ## Contributors
 
