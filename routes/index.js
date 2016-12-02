@@ -15,6 +15,7 @@ router.get('/',
     res.render('index', { title: 'Multi-tenant App!' });
   });
 
+/* GET login page. */
 router.get('/login',
   tenant.setCurrent(),
   function(req, res) {
@@ -31,12 +32,14 @@ router.get('/login',
     res.redirect(`https://${process.env.AUTH0_DOMAIN}/authorize?${query}`);
   });
 
+/* GET logout page. */
 router.get('/logout', 
   function(req, res){
     req.logout();
     res.redirect('/');
   });
 
+/* OIDC callback endpoint */
 router.get('/callback',
   passport.authenticate('auth0', { failWithError: true }),
   tenant.setCurrent(req => req.session.loginTenant),
