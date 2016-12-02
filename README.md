@@ -120,6 +120,12 @@ To see how this sample handles different users and different tenants, try each o
 4. Browse to `tenant2`'s user page: http://tenant2.yourcompany.com:3000/user
 5. Since this user not a member of `tenant2` they will be redirected to a page that informs them they don't have access and that they should choose a valid tenant
 
+### Scenario 7: Non-tenant user attempts to log in
+
+1. Browse to the root website: http://yourcompany.com:3000/
+2. Log in as `user3@example.com`
+3. This user is not a member of any tenant and will be blocked by Auth0 (via the Authorization extension) from even being able to access the application
+
 ## Contributors
 
 Check them out [here](https://github.com/auth0-samples/auth0-cas-server/graphs/contributors)
