@@ -1,15 +1,15 @@
 # Auth0 Multi-tenant Website Sample
 
-Sample that demonstrates a simple multi-tenant web application that uses the [Authorization extension](https://auth0.com/docs/extensions/authorization-extension) extension to manage tenants with groups.
+This sample demonstrates a simple multi-tenant web application that uses the [Authorization extension](https://auth0.com/docs/extensions/authorization-extension) extension to manage tenants using groups.
 
 ## Features
 
-* Tenants are decoupled from the Auth0 connections used to store the users
-* Users are organized into tenants using logical groups vs. partitioned by Auth0 connections
-* Therefore you can store _all_ users (across all tenants) in one Database connection (as shown in the sample) or across multiple connections (eg. some users in the Database connection and some users in an enterprise connection, like AD)
-* The multi-tenant application is represented as a single Client in Auth0 (with a single OAuth2 callback endpoint) vs. one client per tenant
-* The multi-tenant application is a simple Node.js (Express) app
-* A SPA app could also be built in a similar fashion, but a regular web app was simpler to remonstrate
+* Instead of partitioning tenant users by connections (which is a common approach), this sample uses groups (powered by the **Authorization extension**)
+* This decouples tenants from connections, allowing more flexibility
+* Therefore if you like, you can store _all_ users (across all tenants) in one Database connection (as shown in the sample) or across multiple connections (eg. some users in the Database connection and some users in an enterprise connection, like AD)
+* The multi-tenant application is represented as a single Client in Auth0 (with a single OAuth2 callback endpoint) vs. one client per tenant (which is another common approach)
+* This makes for simpler configuration and implementation within the application
+* The multi-tenant application itself is a simple Node.js (Express) website. A SPA app could also be built in a similar fashion, but a regular web app was simpler to demonstrate since it doesn't require a backing API.
 
 ## How it works
 
