@@ -56,6 +56,14 @@ router.get('/callback',
     delete req.session.returnTo;
 
     res.redirect(url);
+  },
+  function(err, req, res, next) {
+    if (err.constructor.name === 'AuthenticationError') {
+      err.description = req.query.error_description;
+      return res.json(err);
+    }
+
+    next(err);
   });
 
 module.exports = router;
