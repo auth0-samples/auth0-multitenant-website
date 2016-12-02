@@ -2,7 +2,8 @@ var express = require('express');
 var passport = require('passport');
 var router = express.Router();
 var querystring = require('querystring');
-var ensureTenant = require('../lib/tenant').ensureTenant();
+
+var tenant = require('../lib/tenant');
 
 var env = {
   AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
@@ -11,20 +12,20 @@ var env = {
 };
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  if (req.user) {
-    res.redirect('/user');
-  }
+router.get('/', 
+  function(req, res, next) {
+    if (req.user) {
+      res.redirect('/user');
+    }
 
-  res.render('index', { title: 'Multi-tenant App!', env: env });
-});
+    res.render('index', { title: 'Multi-tenant App!', env: env });
+  });
 
 router.get('/login',
+  tenant.setCurrent(),
   function(req, res) {
-    var hostParts = req.get('host').split('.');
-    var tenant = hostParts.length > 2 ? hostParts[0] : null;
-    req.session.tenant = tenant;
-    req.session.returnTo = req.protocol + '://' + req.get('host') + '/user';
+    // use session to pass login tenant (if one exists) through login flow
+    req.session.loginTenant = req.tenant;
 
     var query = querystring.stringify({
       client_id: process.env.AUTH0_CLIENT_ID,
@@ -36,16 +37,25 @@ router.get('/login',
     res.redirect(`https://${process.env.AUTH0_DOMAIN}/authorize?${query}`);
   });
 
-router.get('/logout', function(req, res){
-  req.logout();
-  res.redirect('/');
-});
+router.get('/logout', 
+  function(req, res){
+    req.logout();
+    res.redirect('/');
+  });
 
 router.get('/callback',
   passport.authenticate('auth0', { failWithError: true }),
-  ensureTenant,
+  tenant.setCurrent(req => req.session.loginTenant),
+  tenant.ensureCurrent(),
   function(req, res) {
-    res.redirect(req.session.returnTo);
+    var path = req.session.returnTo || '/user';
+    var url = `http://${req.tenant}.yourcompany.com:3000${path}`;
+
+    // clear session values used to complete login flow
+    delete req.session.loginTenant;
+    delete req.session.returnTo;
+
+    res.redirect(url);
   });
 
 module.exports = router;
