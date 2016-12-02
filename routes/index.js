@@ -5,12 +5,6 @@ var querystring = require('querystring');
 
 var tenant = require('../lib/tenant');
 
-var env = {
-  AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
-  AUTH0_DOMAIN: process.env.AUTH0_DOMAIN,
-  AUTH0_CALLBACK_URL: process.env.AUTH0_CALLBACK_URL || 'http://localhost:3000/callback'
-};
-
 /* GET home page. */
 router.get('/', 
   function(req, res, next) {
@@ -18,7 +12,7 @@ router.get('/',
       res.redirect('/user');
     }
 
-    res.render('index', { title: 'Multi-tenant App!', env: env });
+    res.render('index', { title: 'Multi-tenant App!' });
   });
 
 router.get('/login',
@@ -31,7 +25,7 @@ router.get('/login',
       client_id: process.env.AUTH0_CLIENT_ID,
       response_type: 'code',
       scopes: 'openid profile bar',
-      redirect_uri: process.env.AUTH0_CALLBACK_URL
+      redirect_uri: `http://${process.env.ROOT_DOMAIN}:${process.env.PORT}/callback`
     });
 
     res.redirect(`https://${process.env.AUTH0_DOMAIN}/authorize?${query}`);
