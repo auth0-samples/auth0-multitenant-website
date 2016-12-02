@@ -7,7 +7,4 @@ block content
     ul
       - each tenant in tenants
         li
-          a(href="http://" + tenant + ".yourcompany.com:3000/user") #{tenant}
-  
-
-  
+          a(href=tenant.url) #{tenant.name}
