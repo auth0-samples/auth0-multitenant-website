@@ -23,6 +23,8 @@ To see this sample in action following the steps in the next few sections.
 
 1. Create a new Client called "Multi-Tenant Website":
   * Allowed Callback URL: `http://yourcompany.com:3000/callback`
+  * Application Metadata (Advanced Settings):
+    * Key: `required_roles`, Value: `Tenant User`
 
 2. Make sure you have a Database Connection and make sure that connection is enabled for the "Multi-Tenant Website" client
 
@@ -30,19 +32,30 @@ To see this sample in action following the steps in the next few sections.
   * `user1@example.com`
   * `user2@example.com`
   * `user3@example.com`
-  * `admin@example.com`
+  * `user4@example.com`
 
-4. Install the [Auth0 Authorization](https://auth0.com/docs/extensions/authorization-extension) extension and perform the following actions:
+4. Create a rule that will only allow users in the `Tenant User` role to have access to the website. Simply copy the rule sample in the [Controlling Application Access](https://auth0.com/docs/extensions/authorization-extension#controlling-application-access) section of the **Auth0 Authorization** extension docs page and give it a descriptive name (like `authorize-applications`).
 
-  1. Create two groups in the extension that represent two different tenants:
-    * `tenant1`
-    * `tenant2`
+### Auth0 Authorization extension setup
 
-  2. Add `user1@example.com` and `admin@example.com` to the `tenant1` group
+1. Install the [Auth0 Authorization](https://auth0.com/docs/extensions/authorization-extension) extension via the Extensions tab in the Auth0 Dashboard. Then log into the extension.
 
-  3. Add `user2@example.com` and `admin@example.com` to the `tenant2` group
+2. Go to the extension Configuration page (upper-right corner menu) and enable the "Groups" and "Roles" options under the **Token Contents** section. Then click the **Publish Rule** button.
 
-  4. Assign both groups to the "Multi-Tenant Website" application so only users assigned to a tenant are authorized to use the app
+3. Create a role that will be used to control access to the website:
+  * `Tenant User`: A user that can access a tenant
+
+4. Create two groups that represent two different tenants:
+  * `tenant1`: Tenant 1
+  * `tenant2`: Tenant 2
+
+5. Add the `Tenant User` role to both groups created in the previous step
+
+6. Add the users`user1@example.com` and `user3@example.com` to the `tenant1` group
+
+7. Add the users `user2@example.com` and `user3@example.com` to the `tenant2` group
+
+8. Go back to the Auth0 Dashboard and make sure the rule created by the extension (`auth0-authorization-extension`) is ordered to run _before_ any other rules. If its not, you can drag it to the top.
 
 ### Local setup
 
@@ -97,13 +110,13 @@ To see how this sample handles different users and different tenants, try each o
 ### Scenario 3: Multi-tenant user logs into root website
 
 1. Browse to the root website: http://yourcompany.com:3000/
-2. Log in as `admin@example.com`
+2. Log in as `user3@example.com`
 3. This user is a member of both tenants so you will be redirected to a page to choose the desired tenant
 
 ### Scenario 4: Multi-tenant user logs directly into tenant website
 
 1. Browse directly to `tenant1`: http://tenant1.yourcompany.com:3000/
-2. Log in as `admin@example.com`
+2. Log in as `user3@example.com`
 3. This scenario has the same outcome as Scenario 2
 
 ### Scenario 5: Tenant user logging into disallowed tenant
@@ -123,8 +136,8 @@ To see how this sample handles different users and different tenants, try each o
 ### Scenario 7: Non-tenant user attempts to log in
 
 1. Browse to the root website: http://yourcompany.com:3000/
-2. Log in as `user3@example.com`
-3. This user is not a member of any tenant and will be blocked by Auth0 (via the Authorization extension) from even being able to access the application
+2. Log in as `user4@example.com`
+3. This user is not a member of any tenant and will be blocked by Auth0 (via the rule we created in the [Auth0 setup](#auth0-setup) section) from even being able to access the application
 
 ## Contributors
 
