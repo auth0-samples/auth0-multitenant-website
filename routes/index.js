@@ -1,7 +1,6 @@
 var express = require('express');
 var passport = require('passport');
 var router = express.Router();
-var querystring = require('querystring');
 
 var tenant = require('../lib/tenant');
 
@@ -18,19 +17,13 @@ router.get('/',
 /* GET login page. */
 router.get('/login',
   tenant.setCurrent(),
-  function(req, res) {
+  function(req, res, next) {
     // use session to pass login tenant (if one exists) through login flow
     req.session.loginTenant = req.tenant;
 
-    var query = querystring.stringify({
-      client_id: process.env.AUTH0_CLIENT_ID,
-      response_type: 'code',
-      scopes: 'openid profile bar',
-      redirect_uri: `http://${process.env.ROOT_DOMAIN}:${process.env.PORT}/callback`
-    });
-
-    res.redirect(`https://${process.env.AUTH0_DOMAIN}/authorize?${query}`);
-  });
+    next();
+  },
+  passport.authenticate('auth0'));
 
 /* GET logout page. */
 router.get('/logout', 
