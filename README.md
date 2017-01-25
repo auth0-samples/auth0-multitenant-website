@@ -37,6 +37,19 @@ http://tenant1.yourcompany.com:3000/
 
 The website uses the [Passport.js provider for Auth0](https://github.com/auth0/passport-auth0) to perform authentication via the OpenID Connect protocol. This makes it easy to obtain a user profile for a user, which is what is going to carry the `groups` claim, which itself will contain all of the tenants that the user is authorized to access. Different access scenarios are controlled using a set of [tenant middleware functions](lib/tenant.js). The primary endpoints that are secured are the OAuth2 `/callback` (see the [index](routes/index.js) route) and `/user` (see the [user](routes/user.js) route).
 
+### Limitations
+
+If you want to not only use the Authorization Extension to manage which tenant a user belongs to, but also what roles/permissions they have in that tenant, then you need to know that this sample only supports that if each user can only be a member of _one tenant_. This is because the roles/permissions assigned to users are global to all "tenants" you may define in the Groups section. 
+
+A work-around could be to namespace roles/permissions per tenant.
+
+For example:
+> If you wanted an "Admin" role and had tenants `tenant1` and `tenant2` you could create the roles `tenant1:Admin` and `tenant2:Admin`
+
+The above solution is probably only manageable if you have a small number of total tenants as well as roles/permissions.
+
+What's really needed to solve the roles/permissions per user per tenant problem is to introduce tenant as a first class entity in the Authorization Extension, or make the extension itself extensible so it could read that kind of information from another extension. The good news is that this issue is being considered by the extension authors and will most likely be addressed in a future release.
+
 ## Try
 
 To really see this sample in action, follow the steps in the next few sections to get the sample running locally against your own Auth0 account.
@@ -77,6 +90,8 @@ To really see this sample in action, follow the steps in the next few sections t
 6. Add the users`user1@example.com` and `user3@example.com` to the `tenant1` group
 
 7. Add the users `user2@example.com` and `user3@example.com` to the `tenant2` group
+
+   > Note that user `user4@example.com` has not been added to _any_ tenant group
 
 8. Go back to the Auth0 Dashboard [rules tab](https://manage.auth0.com/#/rules) and make sure the rule created by the extension (`auth0-authorization-extension`) is ordered to run _before_ any other rules. If its not, you can drag it to the top.
 
