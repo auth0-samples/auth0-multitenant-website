@@ -1,9 +1,14 @@
+var dotenv = require('dotenv');
 var express = require('express');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 var router = express.Router();
 
-function buildTenants (req) {
-  return req.user._json.groups.map(tenant => {
+dotenv.load();
+
+function buildTenants (req) {  
+  var groups = req.user._json[`http://${process.env.ROOT_DOMAIN}/claims/groups`]
+
+  return groups.map(tenant => {
     return {
       name: tenant,
       url: `http://${tenant}.${process.env.ROOT_DOMAIN}:${process.env.PORT}/user`
