@@ -69,7 +69,19 @@ To really see this sample in action, follow the steps in the next few sections t
   * `user3@example.com`
   * `user4@example.com`
 
-4. Create a [rule](https://manage.auth0.com/#/rules) that will only allow users in the `Tenant User` role (which we will configure shortly) to have access to the website. Simply copy the rule sample in the [Controlling Application Access](https://auth0.com/docs/extensions/authorization-extension#controlling-application-access) section of the **Auth0 Authorization** extension docs page and give it a descriptive name like `authorize-applications`.
+4. Create a [rule](https://manage.auth0.com/#/rules) named `authorize-applications` that will only allow users in the `Tenant User` role (which we will configure shortly) to have access to the website. Simply copy the rule below.  Once we configure the Authorization Extension below this will will follow that rule in execution order.
+
+```
+var namespace = 'http://yourcompany.com/claims/'; // You can set your own namespace, but do not use an Auth0 domain
+
+  // Add the namespaced tokens. Remove any which is not necessary for your scenario (we aren't using `permissions`)
+  context.idToken[namespace + "permissions"] = user.permissions;
+  context.idToken[namespace + "groups"] = user.groups;
+  context.idToken[namespace + "roles"] = user.roles;
+  
+  return callback(null, user, context);
+}
+```
 
 ### Auth0 Authorization extension setup
 
