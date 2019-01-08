@@ -5,13 +5,13 @@ var router = express.Router();
 var tenant = require('../lib/tenant');
 
 /* GET user profile. */
-router.get('/', 
+router.get('/',
   ensureLoggedIn(),
   tenant.setCurrent(),
   tenant.ensureCurrent(),
-  tenant.ensureUrl(), 
+  tenant.ensureUrl(),
   function(req, res) {
-    var tenants = req.user._json.groups.map(tenant => {
+    var tenants = req.user._json[`http://${process.env.ROOT_DOMAIN}/claims/groups`].map(tenant => {
       var isActive = tenant === req.tenant;
 
       return {
@@ -21,8 +21,8 @@ router.get('/',
       };
     });
 
-    res.render('user', { 
-      user: req.user, 
+    res.render('user', {
+      user: req.user,
       tenants: tenants,
       currentTenant: req.tenant
     });

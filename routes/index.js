@@ -23,13 +23,15 @@ router.get('/login',
 
     next();
   },
-  passport.authenticate('auth0'));
+  passport.authenticate('auth0', {
+    scope: 'openid email profile'
+  }));
 
 /* GET logout page. */
 router.get('/logout', 
   function(req, res){
     req.logout();
-    res.redirect('/');
+    res.redirect(`https://${process.env.AUTH0_DOMAIN}/v2/logout?client_id=${process.env.AUTH0_CLIENT_ID}&returnTo=${encodeURI(process.env.AUTH0_LOGOUT_RETURN_URL)}`);
   });
 
 /* OIDC callback endpoint */
