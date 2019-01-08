@@ -56,10 +56,11 @@ To really see this sample in action, follow the steps in the next few sections t
 
 ### Auth0 setup
 
-1. Create a new [client](https://manage.auth0.com/#/clients) called "Multi-Tenant Website":
-  * Allowed Callback URL: `http://yourcompany.com:3000/callback`
-  * Application Metadata (Advanced Settings):
-    * Key: `required_roles`, Value: `Tenant User`
+1. Create a new [Regular Web App](https://manage.auth0.com/#/clients) called "Multi-Tenant Website":
+   * Allowed Callback URLs: `http://yourcompany.com:3000/callback`
+   * Allowed Logout URLs: `http://yourcompany.com:3000/`
+   * Application Metadata (Advanced Settings):
+     * Key: `required_roles`, Value: `Tenant User`
 
 2. Make sure you have a [database connection](https://manage.auth0.com/#/connections/database) and make sure that connection is enabled for your "Multi-Tenant Website" client
 
