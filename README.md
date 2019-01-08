@@ -7,7 +7,7 @@ This sample demonstrates a simple multi-tenant web application that uses the [Au
 * Instead of partitioning tenant users by connections (which is a common approach), this sample uses groups (powered by the **Authorization extension**)
 * This decouples tenants from connections, allowing more flexibility
 * Therefore if you like, you can store _all_ users (across all tenants) in one Database connection (as shown in the sample) or across multiple connections (eg. some users in the Database connection and some users in an enterprise connection, like AD)
-* The multi-tenant application is represented as a single Client in Auth0 (with a single OAuth2 callback endpoint) vs. one client per tenant (which is another common approach)
+* The multi-tenant application is represented as a single Application in Auth0 (with a single OAuth2 callback endpoint) vs. one app per tenant (which is another common approach)
 * This makes for simpler configuration and implementation within the application
 * The multi-tenant application itself is a simple Node.js (Express) website. A SPA app could also be built in a similar fashion, but a regular web app was simpler to demonstrate since it doesn't require a backing API.
 
@@ -62,13 +62,13 @@ To really see this sample in action, follow the steps in the next few sections t
    * Application Metadata (Advanced Settings):
      * Key: `required_roles`, Value: `Tenant User`
 
-2. Make sure you have a [database connection](https://manage.auth0.com/#/connections/database) and make sure that connection is enabled for your "Multi-Tenant Website" client
+2. Make sure you have a [database connection](https://manage.auth0.com/#/connections/database) and make sure that connection is enabled for your "Multi-Tenant Website" app
 
 3. Create four [users](https://manage.auth0.com/#/users) in that database connection:
-  * `user1@example.com`
-  * `user2@example.com`
-  * `user3@example.com`
-  * `user4@example.com`
+   * `user1@example.com`
+   * `user2@example.com`
+   * `user3@example.com`
+   * `user4@example.com`
 
 4. Create a [rule](https://manage.auth0.com/#/rules) that will only allow users in the `Tenant User` role (which we will configure shortly) to have access to the website. Simply copy the rule sample in the [Create the Rule Enforcing Application Roles](https://auth0.com/docs/extensions/authorization-extension/v2/rules#step-2-create-the-rule-enforcing-application-roles) section of the **Auth0 Authorization** extension docs page and give it a descriptive name like `authorize-applications`.
 
@@ -86,15 +86,15 @@ To really see this sample in action, follow the steps in the next few sections t
 
 3. Create a role that will be used to control access to the website:  
 
-  * `Tenant User`: A user that can access a tenant
+   * `Tenant User`: A user that can access a tenant
 
 4. Create two groups that represent two different tenants:
-  * `tenant1`: Tenant 1
-  * `tenant2`: Tenant 2
+   * `tenant1`: Tenant 1
+   * `tenant2`: Tenant 2
 
 5. Add the `Tenant User` role to both groups created in the previous step
 
-6. Add the users`user1@example.com` and `user3@example.com` to the `tenant1` group
+6. Add the users `user1@example.com` and `user3@example.com` to the `tenant1` group
 
 7. Add the users `user2@example.com` and `user3@example.com` to the `tenant2` group
 
@@ -106,29 +106,30 @@ To really see this sample in action, follow the steps in the next few sections t
 
 1. Add the following entries to your `hosts` file (eg. `/etc/hosts`), which will make all the domain names used in this sample resolve to `localhost`:  
 
-  ```
-  127.0.0.1  tenant1.yourcompany.com
-  127.0.0.1  tenant2.yourcompany.com
-  127.0.0.1  yourcompany.com
-  ```
+   ```
+   127.0.0.1  tenant1.yourcompany.com
+   127.0.0.1  tenant2.yourcompany.com
+   127.0.0.1  yourcompany.com
+   ```
 
 2. Create a `.env` file:  
 
-  ```
-  AUTH0_CLIENT_ID=client-id
-  AUTH0_CLIENT_SECRET=client-secret
-  AUTH0_DOMAIN=auth0-domain
-  ROOT_DOMAIN=yourcompany.com
-  PORT=3000
-  ```
+   ```
+   AUTH0_CLIENT_ID=client-id
+   AUTH0_CLIENT_SECRET=client-secret
+   AUTH0_DOMAIN=auth0-domain
+   AUTH0_LOGOUT_RETURN_URL=http://yourcompany.com:3000/
+   ROOT_DOMAIN=yourcompany.com
+   PORT=3000
+   ```
 
-  where `client-id`, `client-secret`, `auth0-domain` are the settings from your "Multi-Tenant Website" app
+   where `client-id`, `client-secret`, `auth0-domain` are the settings from your "Multi-Tenant Website" app
 
 3. Install dependencies  
 
-  ```sh
-  npm install
-  ```
+   ```sh
+   npm install
+   ```
 
 4. Start the web server  
 
