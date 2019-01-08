@@ -23,7 +23,9 @@ router.get('/login',
 
     next();
   },
-  passport.authenticate('auth0'));
+  passport.authenticate('auth0', {
+    scope: 'openid email profile'
+  }));
 
 /* GET logout page. */
 router.get('/logout', 
