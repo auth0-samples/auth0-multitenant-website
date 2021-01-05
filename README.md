@@ -167,7 +167,7 @@ To see how this sample handles different users and different tenants, try each o
 
 ### Scenario 5: Tenant user logging into disallowed tenant
 
-1. Browse directly to `tenant2`: http://tenant1.yourcompany.com:3000/
+1. Browse directly to `tenant2`: http://tenant2.yourcompany.com:3000/
 2. Log in as `user1@example.com`
 3. Since this user not a member of `tenant2` they will be redirected to a page that informs them they don't have access and that they should choose a valid tenant
 
